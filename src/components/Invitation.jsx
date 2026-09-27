@@ -25,7 +25,7 @@ const calendarEventLink = (() => {
     'DTSTART:20270112T150000',
     'DTEND:20270112T180000',
     'SUMMARY:Noivado Kel & Davi',
-    'LOCATION:Rua C\u00f3rrego das Rosas\\, Jardim Jord\u00e3o - Recife/PE',
+    // 'LOCATION:Rua C\u00f3rrego das Rosas\\, Jardim Jord\u00e3o - Recife/PE',
     'DESCRIPTION:Venha celebrar o nosso noivado!',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -41,7 +41,7 @@ const pastorCalendarEventLink = (() => {
     'DTSTART:20270116T150000',
     'DTEND:20270116T180000',
     'SUMMARY:Noivado Kauã e Débora',
-    'LOCATION:Rua C\u00f3rrego das Rosas\\, Jardim Jord\u00e3o - Recife/PE',
+    // 'LOCATION:Rua C\u00f3rrego das Rosas\\, Jardim Jord\u00e3o - Recife/PE',
     'DESCRIPTION:Noivado de Kauã e Débora',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -240,13 +240,13 @@ export default function Invitation({ pastorMode = false }) {
                 </>
               }
             />
-            <span className="w-px shrink-0 bg-gold/30 lg:hidden" />
+            {/* <span className="w-px shrink-0 bg-gold/30 lg:hidden" />
             <InfoItem
               icon={PinIcon}
               label={<span>Rua C&oacute;rrego das Rosas</span>}
               href="https://www.google.com/maps/search/?api=1&query=Rua+C%C3%B3rrego+das+Rosas%2C+Jardim+Jord%C3%A3o%2C+Recife+-+PE"
               ariaLabel="Ver localiza&ccedil;&atilde;o no mapa"
-            />
+            /> */}
           </motion.div>
 
           {!pastorMode && (
