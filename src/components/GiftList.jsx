@@ -126,7 +126,7 @@ export default function GiftList() {
           className="absolute left-5 top-6 inline-flex items-center gap-1.5 font-inter text-[11px] font-medium uppercase tracking-wide text-ink/60 transition-colors duration-200 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bambu-dark sm:left-8 sm:top-8"
         >
           <ArrowIcon className="h-3.5 w-3.5 rotate-180" />
-          Voltar ao convite
+          Voltar
         </a>
 
         <p className="font-inter text-[11px] font-medium uppercase tracking-[0.32em] text-bambu-dark">
