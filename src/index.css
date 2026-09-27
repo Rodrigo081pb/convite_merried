@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #efe9dc;
+  overflow-x: hidden;
+}
+
+/* Textura sutil de papel, evita o "flat design" genérico de IA */
+.paper-texture {
+  background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+.text-shadow-soft {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+::selection {
+  background: #c9a84c;
+  color: #fff;
+}
