@@ -198,7 +198,7 @@ export default function Invitation({ pastorMode = false }) {
                 variants={fadeUp}
                 className="mx-auto mt-4 max-w-[620px] font-serif text-[15px] leading-relaxed text-neutral-700 sm:text-base lg:text-lg"
               >
-                Desde j&aacute; agradecemos o carinho e contamos com a presen&ccedil;a de voc&ecirc;s.
+                Desde j&aacute; agradecemos o carinho e contamos com a sua presença.
               </motion.p>
             </>
           ) : (
@@ -300,7 +300,7 @@ export default function Invitation({ pastorMode = false }) {
                 Kau&atilde; e D&eacute;bora
               </>
             ) : (
-              'Contamos com sua Presen&ccedil;a!'
+              'Contamos com sua Presença!'
             )}
           </motion.p>
         </motion.div>

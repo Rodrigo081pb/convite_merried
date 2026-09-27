@@ -32,7 +32,7 @@ const categories = [
       { name: 'Cortina blackout', icon: CurtainIcon, href: 'https://lista.mercadolivre.com.br/cortina-blecaute-branca' },
       { name: 'Edredom Queen branco', icon: BeddingIcon, href: 'https://lista.mercadolivre.com.br/edredom-queen-branco' },
       { name: 'Peseira de cama', icon: FootboardIcon, href: 'https://lista.mercadolivre.com.br/peseira-cama-preta-branca' },
-      { name: 'Cabides inox/preto', icon: HangerIcon, href: 'https://lista.mercadolivre.com.br/cabide-inox-preto' },
+      { name: 'Cabides', icon: HangerIcon, href: 'https://lista.mercadolivre.com.br/cabide-inox-preto' },
       { name: 'Fronhas brancas', icon: PillowIcon, href: 'https://lista.mercadolivre.com.br/fronha-branca' },
     ],
   },
@@ -42,7 +42,7 @@ const categories = [
     icon: BathIcon,
     items: [
       { name: 'Jogo de toalhas brancas', icon: TowelIcon, href: 'https://lista.mercadolivre.com.br/jogo-toalhas-banho-rosto-branca' },
-      { name: 'Kit higiene banheiro inox', icon: HygieneIcon, href: 'https://lista.mercadolivre.com.br/kit-higiene-banheiro-inox' },
+      { name: 'Kit higiene banheiro', icon: HygieneIcon, href: 'https://lista.mercadolivre.com.br/kit-higiene-banheiro' },
       { name: 'Lixeira inox', icon: TrashBinIcon, href: 'https://lista.mercadolivre.com.br/lixeira-inox-banheiro' },
       { name: 'Cesto de roupa bambu', icon: HamperIcon, href: 'https://lista.mercadolivre.com.br/cesto-roupa-suja-bambu' },
       { name: 'Tapetes', icon: BathMatIcon, href: 'https://lista.mercadolivre.com.br/tapete-banheiro-preto-branco' },
@@ -53,36 +53,71 @@ const categories = [
     title: 'Cozinha',
     icon: KitchenIcon,
     items: [
-      { name: 'Jogo de talheres inox', icon: CutleryIcon, href: 'https://lista.mercadolivre.com.br/jogo-talheres-inox-preto' },
-      { name: 'Envelopamento de geladeira', icon: FridgeIcon, href: 'https://lista.mercadolivre.com.br/adesivo-envelopamento-geladeira-preto-branco' },
-      { name: 'Jogo de sobremesa canelado', icon: PlateIcon, href: 'https://lista.mercadolivre.com.br/jogo-pratos-sobremesa-canelado-branco' },
-      { name: 'Conjunto de talheres', icon: GlassIcon, href: 'https://lista.mercadolivre.com.br/conjunto-tacas-cristal-transparente' },
+      { name: 'Jogo de taças de sobremesa', icon: PlateIcon, href: 'https://lista.mercadolivre.com.br/jogo-de-ta%C3%A7as-sobremesa' },
+      { name: 'Conjunto de talheres', icon: CutleryIcon, href: 'https://lista.mercadolivre.com.br/conjunto-talheres' },
       { name: 'Escorredor', icon: DishRackIcon, href: 'https://lista.mercadolivre.com.br/escorredor-louca-inox-preto' },
+      { name: 'Organizadores de geladeira', icon: FridgeIcon, href: 'https://lista.mercadolivre.com.br/loja/rebirth/rerbith-de-acrilico-para-geladeira_NoIndex_True?sb=storefront_url#D[A:rerbith%20de%20acrilico%20para%20geladeira,L:undefined]&origin=UNKNOWN&as.comp_t=SUG&as.comp_v=%0A&as.comp_id=HIS' },
+      { name: 'Conjunto de taças', icon: GlassIcon, href: 'https://lista.mercadolivre.com.br/conjunto-de-tacas' },
       { name: 'Travessas', icon: PlatterIcon, href: 'https://lista.mercadolivre.com.br/travessa-ceramica-branca-preta' },
     ],
   },
 ];
 
-function GiftCard({ name, category, icon: Icon, href }) {
+// Numera os itens sequencialmente (1, 2, 3...) ao longo de todas as categorias.
+let itemCounter = 0;
+categories.forEach((category) => {
+  category.items.forEach((item) => {
+    itemCounter += 1;
+    item.number = itemCounter;
+  });
+});
+
+const WHATSAPP_NUMBER = '5581985972846';
+
+function handleReserveClick(item) {
+  const guestName = window.prompt('Digite seu nome para confirmarmos a reserva:');
+  if (!guestName || !guestName.trim()) return;
+
+  const message = `Olá, eu sou ${guestName.trim()}. Selecionei o item ${item.number} - ${item.name}, poderia verificar se já está reservado por gentileza?`;
+  const link = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  window.open(link, '_blank', 'noopener,noreferrer');
+}
+
+function GiftCard({ number, name, category, icon: Icon, href }) {
   return (
     <div className="group flex flex-col rounded-lg border border-inox/50 bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.06)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-inox hover:shadow-[0_18px_32px_rgba(0,0,0,0.12)]">
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-bambu/15 text-bambu-dark transition-colors duration-300 group-hover:bg-bambu-dark group-hover:text-paper">
-        <Icon className="h-5 w-5" />
-      </span>
+      <div className="flex items-start justify-between">
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-bambu/15 text-bambu-dark transition-colors duration-300 group-hover:bg-bambu-dark group-hover:text-paper">
+          <Icon className="h-5 w-5" />
+        </span>
+        <span className="rounded-full border border-inox/50 px-2.5 py-1 font-inter text-[11px] font-semibold text-ink/60">
+          Item n&ordm; {String(number).padStart(2, '0')}
+        </span>
+      </div>
       <span className="mt-5 font-inter text-[11px] font-semibold uppercase tracking-[0.16em] text-bambu-dark">
         {category}
       </span>
       <h3 className="mt-1.5 font-playfair text-[18px] font-medium leading-snug text-ink">{name}</h3>
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Ver item: ${name} (abre em nova aba)`}
-        className="mt-6 inline-flex items-center justify-center gap-2 rounded-sm border border-bambu-dark bg-bambu-dark px-4 py-2.5 font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-paper transition-all duration-200 hover:border-ink hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bambu-dark focus-visible:ring-offset-2 active:scale-95"
-      >
-        Ver item
-        <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-      </a>
+      <div className="mt-6 flex flex-col gap-2.5">
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Ver item: ${name} (abre em nova aba)`}
+          className="inline-flex items-center justify-center gap-2 rounded-sm border border-bambu-dark bg-bambu-dark px-4 py-2.5 font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-paper transition-all duration-200 hover:border-ink hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bambu-dark focus-visible:ring-offset-2 active:scale-95"
+        >
+          Ver item
+          <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+        </a>
+        <button
+          type="button"
+          onClick={() => handleReserveClick({ number, name })}
+          aria-label={`Reservar item ${number}: ${name} via WhatsApp`}
+          className="inline-flex items-center justify-center gap-2 rounded-sm border border-bambu-dark px-4 py-2.5 font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-bambu-dark transition-all duration-200 hover:border-ink hover:bg-ink hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bambu-dark focus-visible:ring-offset-2 active:scale-95"
+        >
+          Reservar item
+        </button>
+      </div>
     </div>
   );
 }
@@ -100,7 +135,14 @@ function CategorySection({ title, icon: Icon, items }) {
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
-          <GiftCard key={item.name} name={item.name} category={title} icon={item.icon} href={item.href} />
+          <GiftCard
+            key={item.name}
+            number={item.number}
+            name={item.name}
+            category={title}
+            icon={item.icon}
+            href={item.href}
+          />
         ))}
       </div>
     </section>
@@ -149,6 +191,9 @@ export default function GiftList() {
             alt="Paleta de cores de inspira&ccedil;&atilde;o do enxoval: bambu, preto, inox e branco"
             className="mx-auto w-full rounded-md border border-inox/40 shadow-sm"
           />
+          <p className="mt-3 font-inter text-[11px] italic text-ink/50">
+            Obs.: a paleta de cores acima &eacute; referente aos itens de cozinha.
+          </p>
         </div>
       </header>
 
