@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CalendarIcon, ClockIcon, PinIcon, GiftIcon, PixIcon, HeartTiny } from './icons.jsx';
 
 const PIX_KEY = '81984423591';
+const GIFT_COLLECTION_URL = 'https://collshp.com/dboraalves936884?share_channel_code=1&view=storefront';
 
 const containerStagger = {
   hidden: {},
@@ -15,39 +16,6 @@ const fadeUp = {
   hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] } },
 };
-
-// .ics em data URI: no iPhone abre o app Calend&aacute;rio direto, no Android/desktop baixa o arquivo para importar no Google Calendar
-const calendarEventLink = (() => {
-  const icsContent = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'BEGIN:VEVENT',
-    'DTSTART:20270112T150000',
-    'DTEND:20270112T180000',
-    'SUMMARY:Noivado Kel & Davi',
-    // 'LOCATION:Rua C\u00f3rrego das Rosas\\, Jardim Jord\u00e3o - Recife/PE',
-    'DESCRIPTION:Venha celebrar o nosso noivado!',
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ].join('\r\n');
-  return `data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`;
-})();
-
-const pastorCalendarEventLink = (() => {
-  const icsContent = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'BEGIN:VEVENT',
-    'DTSTART:20270116T150000',
-    'DTEND:20270116T180000',
-    'SUMMARY:Noivado Kauã e Débora',
-    // 'LOCATION:Rua C\u00f3rrego das Rosas\\, Jardim Jord\u00e3o - Recife/PE',
-    'DESCRIPTION:Noivado de Kauã e Débora',
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ].join('\r\n');
-  return `data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`;
-})();
 
 function Divider() {
   return (
@@ -108,6 +76,18 @@ function InfoBox({ icon: Icon, title, children }) {
 
 export default function Invitation({ pastorMode = false }) {
   const [pixCopied, setPixCopied] = useState(false);
+  const [giftModalOpen, setGiftModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!giftModalOpen) return undefined;
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') setGiftModalOpen(false);
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [giftModalOpen]);
 
   const handleCopyPix = async () => {
     try {
@@ -227,8 +207,6 @@ export default function Invitation({ pastorMode = false }) {
             <InfoItem
               icon={CalendarIcon}
               label={<span className="font-display tracking-wider">{pastorMode ? '16/01/27' : '12/01/27'}</span>}
-              href={pastorMode ? pastorCalendarEventLink : calendarEventLink}
-              ariaLabel="Adicionar ao calend&aacute;rio"
             />
             <span className="w-px shrink-0 bg-gold/30 lg:hidden" />
             <InfoItem
@@ -255,15 +233,16 @@ export default function Invitation({ pastorMode = false }) {
                 <p className="font-serif text-[12.5px] leading-snug text-neutral-600 lg:text-sm">
                   Sua presen&ccedil;a j&aacute; &eacute; o nosso maior presente! Se quiser presentear, acesse a lista.
                 </p>
-                <a
-                  href="/lista-presentes"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Ver lista de presentes completa (abre em nova aba)"
+                <button
+                  type="button"
+                  onClick={() => setGiftModalOpen(true)}
+                  aria-haspopup="dialog"
+                  aria-expanded={giftModalOpen}
+                  aria-label="Abrir lista de presentes"
                   className="mt-3 inline-flex w-full items-center justify-center rounded-sm border border-gold/50 bg-olive-dark px-3 py-2 font-sans text-[10.5px] font-semibold uppercase tracking-wide text-cream transition-colors duration-200 hover:bg-olive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-95 lg:text-xs"
                 >
                   Ver lista completa
-                </a>
+                </button>
               </InfoBox>
 
               <InfoBox icon={PixIcon} title="Pix">
@@ -305,6 +284,60 @@ export default function Invitation({ pastorMode = false }) {
           </motion.p>
         </motion.div>
       </motion.div>
+
+      {giftModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-olive-dark/70 px-4 py-4 backdrop-blur-[2px]"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setGiftModalOpen(false);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gift-modal-title"
+            className="relative max-h-[calc(100dvh-2rem)] w-full max-w-xs overflow-y-auto rounded-sm border border-gold/60 bg-cream px-5 py-5 text-center shadow-envelope sm:px-6"
+          >
+            <button
+              type="button"
+              onClick={() => setGiftModalOpen(false)}
+              aria-label="Fechar lista de presentes"
+              className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full text-lg leading-none text-olive-dark transition-colors hover:bg-gold/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
+            >
+              &times;
+            </button>
+            <GiftIcon className="mx-auto h-5 w-5 text-gold-dark" />
+            <h2 id="gift-modal-title" className="mt-2 font-script text-3xl text-olive">
+              Lista de presentes
+            </h2>
+            <div className="mt-1">
+              <Divider />
+            </div>
+            <div className="mt-3 h-28 overflow-hidden rounded-sm border border-gold/40 bg-white shadow-sm">
+              <img
+                src="/imgs/paleta_cores/paleta.jpeg"
+                alt="Paleta de cores do novo lar: bambu, preto, inox e branco"
+                className="h-full w-full object-contain"
+                draggable={false}
+              />
+            </div>
+            <p className="mt-3 font-serif text-xs leading-relaxed text-neutral-700">
+              Preparamos tudo com carinho. Acesse nossa cole&ccedil;&atilde;o para escolher um presente para o novo lar.
+            </p>
+            <a
+              href={GIFT_COLLECTION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setGiftModalOpen(false)}
+              className="mt-4 inline-flex w-full items-center justify-center rounded-sm border border-gold/50 bg-olive-dark px-3 py-2.5 font-sans text-[10px] font-semibold uppercase tracking-wide text-cream transition-colors hover:bg-olive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-95"
+            >
+              Acessar a lista
+            </a>
+
+          </div>
+        </div>
+      )}
     </section>
   );
 }
