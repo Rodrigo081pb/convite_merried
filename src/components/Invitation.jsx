@@ -194,7 +194,7 @@ export default function Invitation({ pastorMode = false }) {
 
           <motion.blockquote variants={fadeUp} className="relative mx-auto max-w-[260px] lg:max-w-[420px]">
             <p className="font-serif text-[14px] italic leading-relaxed text-neutral-700 lg:text-lg">
-              Acima de tudo, porém, revistam-se do amor, que é o elo perfeito.
+              Acima de tudo, porÃ©m, revistam-se do amor, que Ã© o elo perfeito.
             </p>
             <footer className="mt-2 font-sans text-[11px] font-semibold tracking-wide text-neutral-800 lg:text-xs">
               Colossenses <span className="font-display tracking-wider">3:14</span>
