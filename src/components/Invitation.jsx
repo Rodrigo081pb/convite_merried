@@ -194,10 +194,10 @@ export default function Invitation({ pastorMode = false }) {
 
           <motion.blockquote variants={fadeUp} className="relative mx-auto max-w-[260px] lg:max-w-[420px]">
             <p className="font-serif text-[14px] italic leading-relaxed text-neutral-700 lg:text-lg">
-              &ldquo;Assim, eles j&aacute; n&atilde;o s&atilde;o dois, mas sim uma s&oacute; carne. Portanto, o que Deus uniu, ningu&eacute;m separe.&rdquo;
+              Acima de tudo, porém, revistam-se do amor, que é o elo perfeito.
             </p>
             <footer className="mt-2 font-sans text-[11px] font-semibold tracking-wide text-neutral-800 lg:text-xs">
-              Mateus <span className="font-display tracking-wider">19:6</span>
+              Colossenses <span className="font-display tracking-wider">3:14</span>
             </footer>
           </motion.blockquote>
 
@@ -206,7 +206,7 @@ export default function Invitation({ pastorMode = false }) {
           <motion.div variants={fadeUp} className="flex items-stretch justify-center gap-0 lg:gap-4">
             <InfoItem
               icon={CalendarIcon}
-              label={<span className="font-display tracking-wider">{pastorMode ? '16/01/27' : '12/01/27'}</span>}
+              label={<span className="font-display tracking-wider">{pastorMode ? '16/01/27' : '16/01/27'}</span>}
             />
             <span className="w-px shrink-0 bg-gold/30 lg:hidden" />
             <InfoItem
