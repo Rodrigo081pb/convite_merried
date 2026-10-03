@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CalendarIcon, ClockIcon, PinIcon, GiftIcon, PixIcon, HeartTiny } from './icons.jsx';
+import { CalendarIcon, ClockIcon, PinIcon, GiftIcon, PixIcon } from './icons.jsx';
+import Divider from './Divider.jsx';
+import LocationModal from './LocationModal.jsx';
+import CalendarModal from './CalendarModal.jsx';
+import AcceptModal from './AcceptModal.jsx';
+import RsvpFinale from './RsvpFinale.jsx';
 
 const PIX_KEY = '81984423591';
+// Mesmo numero da chave PIX (DDI 55 + DDD 81); ajuste aqui se o WhatsApp for outro.
+const WHATSAPP_NUMBER = '5581984423591';
+const GIFT_LIST_PATH = '/lista-presentes';
 const GIFT_COLLECTION_URL = 'https://collshp.com/dboraalves936884?share_channel_code=1&view=storefront';
 
 const containerStagger = {
@@ -17,48 +25,47 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] } },
 };
 
-function Divider() {
-  return (
-    <div className="mx-auto my-4 flex max-w-[210px] items-center justify-center gap-2">
-      <span className="h-px flex-1 bg-gradient-to-r from-transparent to-gold/60" />
-      <span className="flex items-center gap-1.5 text-gold">
-        <span className="h-1 w-1 rounded-full bg-gold/70" />
-        <HeartTiny className="h-3 w-3" />
-        <span className="h-1 w-1 rounded-full bg-gold/70" />
-      </span>
-      <span className="h-px flex-1 bg-gradient-to-l from-transparent to-gold/60" />
-    </div>
-  );
-}
-
-function InfoItem({ icon: Icon, label, sub, href, ariaLabel }) {
+function InfoItem({ icon: Icon, label, sub, hint, onClick, ariaLabel }) {
   const iconBadge = (
-    <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gold/50 bg-gold/10 text-gold-dark shadow-sm transition-transform duration-200 lg:h-11 lg:w-11">
+    <span className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gold/50 bg-gold/10 text-gold-dark shadow-sm transition-transform duration-200 group-hover:scale-110 lg:h-11 lg:w-11">
+      {onClick && (
+        <span className="pointer-events-none absolute inset-0 rounded-full border border-gold-dark/40 animate-pulseRing" />
+      )}
       <Icon className="h-4 w-4 lg:h-5 lg:w-5" />
     </span>
   );
 
-  return (
-    <div className="flex min-w-0 flex-1 flex-col items-center gap-2 px-2 lg:gap-3 lg:px-4">
-      {href ? (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={ariaLabel}
-          className="group relative flex h-9 w-9 items-center justify-center rounded-full outline-none transition-transform duration-200 hover:scale-110 focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-95 lg:h-11 lg:w-11"
-        >
-          <span className="pointer-events-none absolute inset-0 rounded-full border border-gold-dark/40 animate-pulseRing" />
-          {iconBadge}
-        </a>
-      ) : (
-        iconBadge
+  const content = (
+    <>
+      {iconBadge}
+      {label && (
+        <span className="font-sans text-sm font-medium leading-tight tracking-wide text-neutral-700 sm:text-base lg:text-lg">
+          {label}
+        </span>
       )}
-      <span className="font-sans text-sm font-medium leading-tight tracking-wide text-neutral-700 sm:text-base lg:text-lg">
-        {label}
-      </span>
       {sub && <span className="font-sans text-xs leading-tight text-neutral-500 lg:text-sm">{sub}</span>}
-    </div>
+      {hint && (
+        <span className="font-sans text-[10.5px] font-semibold uppercase tracking-wide text-gold-dark underline underline-offset-4 lg:text-xs">
+          {hint}
+        </span>
+      )}
+    </>
+  );
+
+  const baseClass = 'group flex min-w-0 flex-1 flex-col items-center gap-2 px-2 lg:gap-3 lg:px-4';
+
+  return onClick ? (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-haspopup="dialog"
+      aria-label={ariaLabel}
+      className={`${baseClass} rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-95`}
+    >
+      {content}
+    </button>
+  ) : (
+    <div className={baseClass}>{content}</div>
   );
 }
 
@@ -77,6 +84,12 @@ function InfoBox({ icon: Icon, title, children }) {
 export default function Invitation({ pastorMode = false }) {
   const [pixCopied, setPixCopied] = useState(false);
   const [giftModalOpen, setGiftModalOpen] = useState(false);
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [acceptOpen, setAcceptOpen] = useState(false);
+
+  const whatsappMessage = pastorMode ? 'Aceitamos o seu convite!' : 'Aceitei o seu convite!';
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
 
   useEffect(() => {
     if (!giftModalOpen) return undefined;
@@ -206,6 +219,8 @@ export default function Invitation({ pastorMode = false }) {
           <motion.div variants={fadeUp} className="flex items-stretch justify-center gap-0 lg:gap-4">
             <InfoItem
               icon={CalendarIcon}
+              onClick={() => setCalendarOpen(true)}
+              ariaLabel="Salvar a data na agenda"
               label={<span className="font-display tracking-wider">{pastorMode ? '16/01/27' : '16/01/27'}</span>}
             />
             <span className="w-px shrink-0 bg-gold/30 lg:hidden" />
@@ -218,58 +233,32 @@ export default function Invitation({ pastorMode = false }) {
                 </>
               }
             />
-            {/* <span className="w-px shrink-0 bg-gold/30 lg:hidden" />
+            <span className="w-px shrink-0 bg-gold/30 lg:hidden" />
             <InfoItem
               icon={PinIcon}
-              label={<span>Rua C&oacute;rrego das Rosas</span>}
-              href="https://www.google.com/maps/search/?api=1&query=Rua+C%C3%B3rrego+das+Rosas%2C+Jardim+Jord%C3%A3o%2C+Recife+-+PE"
-              ariaLabel="Ver localiza&ccedil;&atilde;o no mapa"
-            /> */}
+              label="Local"
+              onClick={() => setLocationOpen(true)}
+              ariaLabel="Ver localiza&ccedil;&atilde;o e como chegar"
+            />
           </motion.div>
 
-          {!pastorMode && (
-            <motion.div variants={fadeUp} className="mt-8 grid grid-cols-2 gap-3 text-left sm:gap-4 lg:gap-6">
-              <InfoBox icon={GiftIcon} title="Lista de Presentes">
-                <p className="font-serif text-[12.5px] leading-snug text-neutral-600 lg:text-sm">
-                  Sua presen&ccedil;a j&aacute; &eacute; o nosso maior presente! Se quiser presentear, acesse a lista.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setGiftModalOpen(true)}
-                  aria-haspopup="dialog"
-                  aria-expanded={giftModalOpen}
-                  aria-label="Abrir lista de presentes"
-                  className="mt-3 inline-flex w-full items-center justify-center rounded-sm border border-gold/50 bg-olive-dark px-3 py-2 font-sans text-[10.5px] font-semibold uppercase tracking-wide text-cream transition-colors duration-200 hover:bg-olive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-95 lg:text-xs"
-                >
-                  Ver lista completa
-                </button>
-              </InfoBox>
-
-              <InfoBox icon={PixIcon} title="Pix">
-                <p className="font-serif text-[12.5px] leading-snug text-neutral-600 lg:text-sm">
-                  Contribua com amor para o nosso novo lar, se preferir.
-                </p>
-                <div className="mx-auto mt-2 flex h-20 w-20 items-center justify-center overflow-hidden rounded-sm border border-gold/50 bg-white p-1 sm:h-24 sm:w-24 lg:h-28 lg:w-28">
-                  <img
-                    src="/imgs/qrcode/qr-pix.png"
-                    alt="QR Code Pix"
-                    className="h-full w-full object-contain"
-                    draggable={false}
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={handleCopyPix}
-                  aria-label="Copiar chave Pix"
-                  className={`mt-3 w-full rounded-sm border px-3 py-2 font-sans text-[10.5px] font-semibold uppercase tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-95 lg:text-xs ${
-                    pixCopied ? 'border-gold bg-gold-dark text-cream' : 'border-gold/50 bg-olive-dark text-cream hover:bg-olive'
-                  }`}
-                >
-                  {pixCopied ? 'Chave copiada!' : 'Copiar chave'}
-                </button>
-              </InfoBox>
-            </motion.div>
-          )}
+          <motion.div variants={fadeUp} className="mx-auto mt-8 grid max-w-sm grid-cols-1 gap-3 text-left sm:gap-4 lg:gap-6">
+            <InfoBox icon={GiftIcon} title="Lista de Presentes">
+              <p className="font-serif text-[12.5px] leading-snug text-neutral-600 lg:text-sm">
+                Sua presen&ccedil;a j&aacute; &eacute; o nosso maior presente! Se quiser presentear, acesse a lista.
+              </p>
+              <button
+                type="button"
+                onClick={() => setGiftModalOpen(true)}
+                aria-haspopup="dialog"
+                aria-expanded={giftModalOpen}
+                aria-label="Abrir lista de presentes"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-sm border border-gold/50 bg-olive-dark px-3 py-2 font-sans text-[10.5px] font-semibold uppercase tracking-wide text-cream transition-colors duration-200 hover:bg-olive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-95 lg:text-xs"
+              >
+                Ver lista completa
+              </button>
+            </InfoBox>
+          </motion.div>
 
           <motion.p variants={fadeUp} className="mt-9 font-script text-3xl text-olive lg:text-4xl">
             {pastorMode ? (
@@ -282,8 +271,19 @@ export default function Invitation({ pastorMode = false }) {
               'Contamos com sua Presença!'
             )}
           </motion.p>
+
+          <RsvpFinale onAccept={() => setAcceptOpen(true)} />
         </motion.div>
       </motion.div>
+
+      <LocationModal open={locationOpen} onClose={() => setLocationOpen(false)} />
+      <CalendarModal open={calendarOpen} onClose={() => setCalendarOpen(false)} />
+      <AcceptModal
+        open={acceptOpen}
+        onClose={() => setAcceptOpen(false)}
+        giftListUrl={GIFT_LIST_PATH}
+        whatsappUrl={whatsappUrl}
+      />
 
       {giftModalOpen && (
         <div
