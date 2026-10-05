@@ -33,12 +33,9 @@ export default function AcceptModal({ open, onClose, giftListUrl, whatsappUrl })
         {step === 'ask' ? (
           <motion.div key="ask" {...stepMotion}>
             <h2 id="accept-modal-title" className="mt-2 font-script text-3xl leading-tight text-olive">
-              J&aacute; escolheu nosso presente? kkk
+              J&aacute; escolheu nosso presente? 
             </h2>
             <Divider />
-            <p className="font-serif text-sm leading-relaxed text-neutral-700">
-              Sem press&atilde;o! Mas ele deixa o nosso novo lar ainda mais completo.
-            </p>
             <div className="mt-5 flex flex-col gap-2.5">
               <a
                 href={giftListUrl}

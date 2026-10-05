@@ -4,22 +4,18 @@ import Modal from './Modal.jsx';
 import { PinIcon } from './icons.jsx';
 import { ArrowRightIcon, ChevronDownIcon } from './actionIcons.jsx';
 
-const LAT = -7.973657;
-const LNG = -34.987149;
-const PLACE_NAME = 'Aldeia KM 7';
+const LAT = -7.973674;
+const LNG = -34.987168;
+const PLACE_NAME = 'Savina Petrille';
 // Nome do local no Google Maps (link curto abaixo); \u00e1 = a agudo
-const MAPS_PLACE_LABEL = 'Aldeia dos Camar\u00e1s, Camaragibe - PE';
-const ADDRESS_TEXT = MAPS_PLACE_LABEL;
+const MAPS_PLACE_LABEL = 'Savina Petrille, Aldeia dos Camar\u00e1s, Camaragibe - PE';
 
-const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/o8x6hszEUDu9SsyW8';
+const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/2S5YHFstRq41pphn9';
 const UBER_URL =
   `https://m.uber.com/ul/?action=setPickup&pickup=my_location` +
   `&dropoff[latitude]=${LAT}&dropoff[longitude]=${LNG}` +
   `&dropoff[nickname]=${encodeURIComponent(PLACE_NAME)}` +
   `&dropoff[formatted_address]=${encodeURIComponent(MAPS_PLACE_LABEL)}`;
-// A 99 nao tem deep link publico de destino: abre o app e o endereco vai copiado.
-const NINETY_NINE_URL = 'https://99app.com/';
-
 // \u00e7 = c cedilha, \u00e9 = e agudo (evita acento direto no arquivo)
 const RIDE_OPTIONS = [
   {
@@ -38,49 +34,14 @@ const RIDE_OPTIONS = [
     badge: <span className="text-[11px] font-bold tracking-tight">Uber</span>,
     badgeClass: 'bg-black text-white',
   },
-  {
-    id: '99',
-    name: '99',
-    hint: 'Abrir o app (endere\u00e7o copiado)',
-    href: NINETY_NINE_URL,
-    badge: <span className="text-sm font-extrabold">99</span>,
-    badgeClass: 'bg-[#ffd400] text-black',
-    copyAddress: true,
-  },
 ];
-
-async function copyText(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-  }
-}
 
 export default function LocationModal({ open, onClose }) {
   const [optionsOpen, setOptionsOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (open) {
-      setOptionsOpen(false);
-      setCopied(false);
-    }
+    if (open) setOptionsOpen(false);
   }, [open]);
-
-  const handleOption = (option) => {
-    if (option.copyAddress) {
-      copyText(ADDRESS_TEXT);
-      setCopied(true);
-    }
-  };
 
   return (
     <Modal open={open} onClose={onClose} titleId="location-modal-title" closeLabel="Fechar localiza&ccedil;&atilde;o">
@@ -88,7 +49,7 @@ export default function LocationModal({ open, onClose }) {
         <div className="relative h-44 w-full bg-cream-dark">
           <img
             src="/imgs/local/image.png"
-            alt="Entrada da Aldeia KM 7, em Camaragibe"
+            alt="Entrada de Savina Petrille, em Camaragibe"
             className="h-full w-full object-cover"
             draggable={false}
           />
@@ -98,9 +59,9 @@ export default function LocationModal({ open, onClose }) {
 
       <PinIcon className="mx-auto h-5 w-5 text-gold-dark" />
       <h2 id="location-modal-title" className="mt-2 font-display text-xl font-semibold tracking-wide text-olive-dark">
-        Aldeia KM 7
+        Savina Petrille
       </h2>
-      <p className="mt-1.5 font-sans text-sm text-neutral-700">Granja Salvina Petrilli</p>
+      <p className="mt-1.5 font-sans text-sm text-neutral-700">Aldeia dos Camar\u00e1s</p>
       <p className="font-sans text-xs text-neutral-500">Camaragibe - PE</p>
 
       <button
@@ -134,7 +95,6 @@ export default function LocationModal({ open, onClose }) {
                   href={option.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => handleOption(option)}
                   className="flex min-h-[52px] items-center gap-3 rounded-sm border border-gold/40 bg-white/60 px-3 py-2 transition-colors hover:bg-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 active:scale-[0.98]"
                 >
                   <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${option.badgeClass}`}>
@@ -148,9 +108,6 @@ export default function LocationModal({ open, onClose }) {
                 </a>
               </li>
             ))}
-            <li aria-live="polite" className="min-h-[1.25rem] pt-2 text-center font-sans text-[11px] text-olive-dark">
-              {copied && 'Endere\u00e7o copiado! Cole no destino da 99.'}
-            </li>
           </motion.ul>
         )}
       </AnimatePresence>
