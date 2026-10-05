@@ -8,7 +8,7 @@ const LAT = -7.973674;
 const LNG = -34.987168;
 const PLACE_NAME = 'Savina Petrille';
 // Nome do local no Google Maps (link curto abaixo); \u00e1 = a agudo
-const MAPS_PLACE_LABEL = 'Savina Petrille, Aldeia dos Camar\u00e1s, Camaragibe - PE';
+const MAPS_PLACE_LABEL = 'Savina Petrille, Aldeia dos Camarás, Camaragibe - PE';
 
 const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/2S5YHFstRq41pphn9';
 const UBER_URL =
@@ -61,7 +61,7 @@ export default function LocationModal({ open, onClose }) {
       <h2 id="location-modal-title" className="mt-2 font-display text-xl font-semibold tracking-wide text-olive-dark">
         Savina Petrille
       </h2>
-      <p className="mt-1.5 font-sans text-sm text-neutral-700">Aldeia dos Camar\u00e1s</p>
+      <p className="mt-1.5 font-sans text-sm text-neutral-700">Aldeia dos Camarás</p>
       <p className="font-sans text-xs text-neutral-500">Camaragibe - PE</p>
 
       <button

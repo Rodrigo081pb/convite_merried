@@ -5,8 +5,8 @@ import { ArrowRightIcon } from './actionIcons.jsx';
 
 // \u00e3 = a til, \u00e9 = e agudo, \u00e7 = c cedilha (evita acento direto no arquivo)
 const EVENT = {
-  title: 'Noivado de Kau\u00e3 e D\u00e9bora',
-  details: 'Contamos com a sua presen\u00e7a!',
+  title: 'Noivado de Kauã e Débora',
+  details: 'Contamos com a sua presença!',
   location: 'Aldeia KM 7 - Granja Salvina Petrilli, Camaragibe - PE',
   // 16/01/2027, 15h-18h em Recife (UTC-3, sem hor\u00e1rio de ver\u00e3o)
   startLocal: '20270116T150000',

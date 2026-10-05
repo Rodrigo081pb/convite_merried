@@ -261,15 +261,9 @@ export default function Invitation({ pastorMode = false }) {
           </motion.div>
 
           <motion.p variants={fadeUp} className="mt-9 font-script text-3xl text-olive lg:text-4xl">
-            {pastorMode ? (
-              <>
                 Com carinho,
                 <br />
-                Kau&atilde; e D&eacute;bora
-              </>
-            ) : (
-              'Contamos com sua Presença!'
-            )}
+                Kauã e Débora
           </motion.p>
 
           <RsvpFinale onAccept={() => setAcceptOpen(true)} />
